@@ -7,7 +7,10 @@ export type {
   Spot,
   SpotId,
   TideEvent,
+  SwimVerdict,
+  SwimVerdictResult,
   Verdict,
   VerdictResult,
+  WaterQualityAlert,
   WindState,
 } from './conditions';

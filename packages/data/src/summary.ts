@@ -31,6 +31,12 @@ interface LocalStamp {
   hour: number;
 }
 
+/** True when the time falls in local session hours (06:00–22:00) at the spot. */
+export function isSessionTime(isoTime: string, timezone: string): boolean {
+  const stamp = localStamp(isoTime, timezone);
+  return stamp !== undefined && isSessionHour(stamp);
+}
+
 function localStamp(isoTime: string, timezone: string): LocalStamp | undefined {
   const parsed = new Date(isoTime);
   if (Number.isNaN(parsed.getTime())) {
