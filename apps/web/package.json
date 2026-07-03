@@ -19,7 +19,7 @@
     "@tonnta/data": "workspace:*",
     "@tonnta/types": "workspace:*",
     "@tonnta/ui": "workspace:*",
-    "next": "^15.5.18",
+    "next": "15.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-native-web": "^0.21.0",
