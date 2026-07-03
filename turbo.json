@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "outputs": ["dist/**", ".next/**", "build/**", "{ios,android,build}/**"],
+      "dependsOn": ["^build"]
+    },
+    "build:watch": {},
+    "lint": {},
+    "lint:fix": {},
+    "test:unit": {},
+    "test:coverage": {},
+    "typecheck": {},
+    "check:all": {
+      "dependsOn": ["build", "typecheck"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

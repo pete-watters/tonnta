@@ -1,0 +1,13 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# pnpm 10+ reads these here; pnpm 9 reads the "pnpm" field in package.json.
+overrides:
+  '@types/react': ^19.0.0
+  '@types/react-dom': ^19.0.0
+  react-native-web: ^0.21.0
+patchedDependencies:
+  tamagui-loader@2.0.0-rc.42: patches/tamagui-loader@2.0.0-rc.42.patch
+  '@tamagui/next-plugin@2.0.0-rc.42': patches/@tamagui__next-plugin@2.0.0-rc.42.patch
+  '@tamagui/web@2.0.0-rc.42': patches/@tamagui__web@2.0.0-rc.42.patch
