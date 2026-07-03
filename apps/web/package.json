@@ -1,0 +1,42 @@
+{
+  "name": "@tonnta/web",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "clean:tamagui": "rm -rf .tamagui",
+    "clean": "rm -rf .tamagui .next",
+    "generate-tamagui-css": "node scripts/generate-tamagui-css.mjs",
+    "dev": "pnpm run clean:tamagui && pnpm run generate-tamagui-css && next dev",
+    "build": "pnpm run clean:tamagui && pnpm run generate-tamagui-css && next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test:unit": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@tonnta/data": "workspace:*",
+    "@tonnta/types": "workspace:*",
+    "@tonnta/ui": "workspace:*",
+    "next": "^15.5.18",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-native-web": "^0.21.0",
+    "tamagui": "2.0.0-rc.42",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@amiceli/vitest-cucumber": "4.7.0",
+    "@cloudflare/next-on-pages": "^1.13.16",
+    "@tamagui/core": "2.0.0-rc.42",
+    "@tamagui/next-plugin": "2.0.0-rc.42",
+    "@tamagui/web": "2.0.0-rc.42",
+    "@tonnta/tsconfig-config": "workspace:*",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.6",
+    "wrangler": "^4.86.0"
+  }
+}
