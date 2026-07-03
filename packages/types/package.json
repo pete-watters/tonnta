@@ -1,0 +1,18 @@
+{
+  "name": "@tonnta/types",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@tonnta/tsconfig-config": "workspace:*",
+    "typescript": "^5.7.0"
+  }
+}

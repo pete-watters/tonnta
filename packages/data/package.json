@@ -1,0 +1,25 @@
+{
+  "name": "@tonnta/data",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "description": "Spot registry, verdict engine and marine data sources for Tonnta",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test:unit": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@tonnta/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@amiceli/vitest-cucumber": "4.7.0",
+    "@tonnta/tsconfig-config": "workspace:*",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.6"
+  }
+}
