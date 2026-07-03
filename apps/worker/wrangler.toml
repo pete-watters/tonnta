@@ -1,0 +1,29 @@
+name = "tonnta-worker"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Forecast/tide/buoy cache — create with `wrangler kv namespace create CACHE`
+# and paste the ids here before first deploy.
+[[kv_namespaces]]
+binding = "CACHE"
+id = "TODO_CREATE_KV_NAMESPACE"
+preview_id = "TODO_CREATE_KV_PREVIEW_NAMESPACE"
+
+# Alert subscriptions — create with `wrangler d1 create tonnta-alerts`,
+# then apply schema: `wrangler d1 execute tonnta-alerts --file=./schema.sql`
+[[d1_databases]]
+binding = "DB"
+database_name = "tonnta-alerts"
+database_id = "TODO_CREATE_D1_DATABASE"
+
+# Condition checks on the hour during session time (05:00–20:00 UTC).
+[triggers]
+crons = ["0 5-20 * * *"]
+
+[vars]
+# Site origin allowed to call the subscribe endpoints (CORS).
+SITE_ORIGIN = "https://tonnta.ie"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT (mailto:)
