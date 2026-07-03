@@ -23,7 +23,7 @@ crons = ["0 5-20 * * *"]
 
 [vars]
 # Site origin allowed to call the subscribe endpoints (CORS).
-SITE_ORIGIN = "https://tonnta.ie"
+SITE_ORIGIN = "https://tonnta.surf"
 
 # Secrets (set via `wrangler secret put <NAME>`):
 #   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT (mailto:)
