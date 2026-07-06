@@ -1,6 +1,6 @@
 'use client';
 
-import type { HourlyConditions, Spot, VerdictResult } from '@tonnta/types';
+import type { HourlyConditions, VerdictResult } from '@tonnta/types';
 
 import { BOARD_LABEL, VERDICT_LABEL, WIND_STATE_LABEL, compassPoint } from '@/lib/format';
 
@@ -12,7 +12,6 @@ import { BOARD_LABEL, VERDICT_LABEL, WIND_STATE_LABEL, compassPoint } from '@/li
  */
 
 interface SeaHeroProps {
-  spot: Spot;
   verdict: VerdictResult;
   hour?: HourlyConditions | undefined;
 }
@@ -81,7 +80,13 @@ function bandSpecs(hour: HourlyConditions | undefined): BandSpec[] {
   ];
 }
 
-function SeaBands({ hour, verdict }: { hour: HourlyConditions | undefined; verdict: string }) {
+export function SeaBands({
+  hour,
+  verdict,
+}: {
+  hour: HourlyConditions | undefined;
+  verdict: string;
+}) {
   const colour = VERDICT_SEA[verdict] ?? '#557D86';
   const bands = bandSpecs(hour);
   const width = 1440;
@@ -122,7 +127,7 @@ function SeaBands({ hour, verdict }: { hour: HourlyConditions | undefined; verdi
   );
 }
 
-export function SeaHero({ spot, verdict, hour }: SeaHeroProps) {
+export function SeaHero({ verdict, hour }: SeaHeroProps) {
   const label = VERDICT_LABEL[verdict.verdict];
   const isGo = verdict.verdict === 'go';
 
@@ -141,38 +146,9 @@ export function SeaHero({ spot, verdict, hour }: SeaHeroProps) {
           zIndex: 1,
           maxWidth: 720,
           margin: '0 auto',
-          padding: '28px 24px 0',
+          padding: '12px 24px 0',
         }}
       >
-        <nav
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-            marginBottom: 48,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "'Clash Display', sans-serif",
-              fontWeight: 600,
-              fontSize: 22,
-              letterSpacing: -0.5,
-            }}
-          >
-            tonnta<span style={{ color: '#E8A33D' }}>.</span>
-          </span>
-          <span
-            style={{
-              fontFamily: "'Spline Sans Mono', monospace",
-              fontSize: 12,
-              color: '#A9BDBF',
-            }}
-          >
-            {spot.name} · {spot.region}
-          </span>
-        </nav>
-
         <div className="tonnta-surface-in">
           <p
             style={{

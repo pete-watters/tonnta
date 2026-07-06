@@ -25,6 +25,8 @@ export interface Spot {
   buoyStationId?: string;
   /** Nearest tide-prediction station on ERDDAP (e.g. "Skerries"). */
   tideStationId?: string;
+  /** EPA bathing-water beach id (data.epa.ie), where the spot is a bathing water. */
+  epaBeachId?: string;
 }
 
 export type WindState = 'offshore' | 'cross-off' | 'cross' | 'cross-on' | 'onshore' | 'glassy';
@@ -51,6 +53,24 @@ export interface VerdictResult {
   board?: Board;
   /** One human sentence: "Worth a look after work — 0.5m and the wind drops at 4." */
   reason: string;
+}
+
+export type SwimVerdict = 'great' | 'ok' | 'no';
+
+export interface SwimVerdictResult {
+  verdict: SwimVerdict;
+  /** One human sentence: "Calm as a pond and 15.2°C — get in." */
+  reason: string;
+  /** Within ±2h of high tide — the swimmable window at a shallow beach. */
+  nearHighTide: boolean;
+}
+
+/** An active EPA bathing-water incident for a beach. */
+export interface WaterQualityAlert {
+  beachId: string;
+  beachName: string;
+  restrictionInPlace: boolean;
+  startDate?: string;
 }
 
 export interface DailySummary {

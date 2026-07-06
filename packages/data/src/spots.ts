@@ -17,6 +17,7 @@ export const SPOTS: readonly Spot[] = [
     facing: 70,
     buoyStationId: 'M2',
     tideStationId: 'Skerries',
+    epaBeachId: 'IEEABWC020_0000_0100',
   },
 ] as const;
 
