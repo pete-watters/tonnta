@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { AlertCard } from '@/components/alert-card';
 import {
   BuoyCard,
   DayStrip,
@@ -166,6 +167,7 @@ export function HomeView({ conditions }: { conditions: SpotConditions }) {
         )}
         {conditions.buoy !== undefined ? <BuoyCard buoy={conditions.buoy} spot={spot} /> : null}
         <TideCard tides={conditions.tides} spot={spot} />
+        {mode === 'surf' ? <AlertCard spotId={spot.id} /> : null}
       </div>
     </>
   );
