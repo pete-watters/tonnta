@@ -13,7 +13,10 @@ import {
 import { SeaHero } from '@/components/sea-hero';
 import { SnamhHero } from '@/components/snamh-hero';
 import { SwimWindowsCard } from '@/components/snamh-sections';
+import { ThemePicker } from '@/components/theme-picker';
 import type { SpotConditions } from '@/lib/conditions';
+import { EiriHero } from '@/themes/eiri/eiri-hero';
+import { useAppTheme } from '@/themes/theme-context';
 
 /**
  * One spot, two audiences: Tonn (surf) and Snámh (swim) read the same sea.
@@ -43,6 +46,8 @@ function useMode(): [Mode, (mode: Mode) => void] {
 }
 
 function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (mode: Mode) => void }) {
+  const { theme } = useAppTheme();
+  const { tokens } = theme;
   const options: { value: Mode; label: string }[] = [
     { value: 'surf', label: 'Tonn · surf' },
     { value: 'snamh', label: 'Snámh · swim' },
@@ -56,8 +61,8 @@ function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (mode: Mode) => 
         gap: 4,
         padding: 4,
         borderRadius: 999,
-        border: '1px solid #22404C',
-        background: '#0E2129',
+        border: `1px solid ${tokens.border}`,
+        background: tokens.surface,
       }}
     >
       {options.map((option) => {
@@ -79,8 +84,8 @@ function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (mode: Mode) => 
               fontFamily: "'General Sans', sans-serif",
               fontSize: 13,
               fontWeight: 600,
-              background: active ? '#E8ECEB' : 'transparent',
-              color: active ? '#0C1B22' : '#A9BDBF',
+              background: active ? tokens.toggleActiveBg : 'transparent',
+              color: active ? tokens.toggleActiveText : tokens.textSoft,
             }}
           >
             {option.label}
@@ -93,11 +98,27 @@ function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (mode: Mode) => 
 
 export function HomeView({ conditions }: { conditions: SpotConditions }) {
   const [mode, setMode] = useMode();
+  const { theme } = useAppTheme();
+  const { tokens } = theme;
   const { spot } = conditions;
+  const surfHero =
+    theme.hero === 'eiri' ? (
+      <EiriHero
+        verdict={conditions.now}
+        hour={conditions.currentHour}
+        buoy={conditions.buoy}
+        nextTide={conditions.tides[0]}
+        latitude={spot.latitude}
+        longitude={spot.longitude}
+        timezone={spot.timezone}
+      />
+    ) : (
+      <SeaHero verdict={conditions.now} hour={conditions.currentHour} />
+    );
 
   return (
     <>
-      <div style={{ background: '#0C1B22' }}>
+      <div style={{ background: tokens.nav }}>
         <nav
           style={{
             maxWidth: 720,
@@ -119,24 +140,27 @@ export function HomeView({ conditions }: { conditions: SpotConditions }) {
                 letterSpacing: -0.5,
               }}
             >
-              tonnta<span style={{ color: '#E8A33D' }}>.</span>
+              tonnta<span style={{ color: tokens.accent }}>.</span>
             </span>
             <span
               style={{
                 fontFamily: "'Spline Sans Mono', monospace",
                 fontSize: 12,
-                color: '#A9BDBF',
+                color: tokens.textSoft,
               }}
             >
               {spot.name} · {spot.region}
             </span>
           </div>
-          <ModeToggle mode={mode} onChange={setMode} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ModeToggle mode={mode} onChange={setMode} />
+            <ThemePicker />
+          </div>
         </nav>
       </div>
 
       {mode === 'surf' ? (
-        <SeaHero verdict={conditions.now} hour={conditions.currentHour} />
+        surfHero
       ) : (
         <SnamhHero
           swim={conditions.swimNow}

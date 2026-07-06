@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 
 import { TamaguiClientProvider } from '@/components/tamagui-provider';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/lib/site';
+import { ThemeProvider } from '@/themes/theme-context';
 
 import '../../public/tamagui.css';
 import './globals.css';
@@ -49,7 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <TamaguiClientProvider>{children}</TamaguiClientProvider>
+        <TamaguiClientProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </TamaguiClientProvider>
       </body>
     </html>
   );
