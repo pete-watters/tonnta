@@ -167,6 +167,11 @@ export function TideCard({ tides, spot }: { tides: TideEvent[]; spot: Spot }) {
           </p>
         ) : null}
       </div>
+      {upcoming.length > 0 ? (
+        <p style={{ ...MONO, margin: '12px 0 0', fontSize: 11, color: '#6E8A90' }}>
+          heights vs mean sea level · Marine Institute
+        </p>
+      ) : null}
     </section>
   );
 }
