@@ -1,3 +1,4 @@
+import { AlertCard } from '@/components/alert-card';
 import { AppFooter } from '@/components/app-footer';
 import {
   BuoyCard,
@@ -36,6 +37,7 @@ export default async function HomePage() {
           <BuoyCard buoy={conditions.buoy} spot={conditions.spot} />
         ) : null}
         <TideCard tides={conditions.tides} spot={conditions.spot} />
+        <AlertCard spotId={conditions.spot.id} />
       </div>
       <AppFooter />
     </main>
