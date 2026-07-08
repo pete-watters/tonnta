@@ -4,7 +4,6 @@ import { SessionLogger } from '@/components/diary/session-logger';
 import { loadSpotConditions } from '@/lib/conditions';
 import type { SessionConditions } from '@/lib/diary';
 
-export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
