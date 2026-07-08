@@ -4,33 +4,41 @@ import type { SwimWindow } from '@tonnta/data';
 import type { Spot } from '@tonnta/types';
 
 import { formatDayName, formatHour } from '@/lib/format';
+import type { ThemeTokens } from '@/themes/registry';
+import { useAppTheme } from '@/themes/theme-context';
 
-const CARD: React.CSSProperties = {
-  background: '#122630',
-  border: '1px solid #22404C',
-  borderRadius: 16,
-  padding: 20,
-};
+function cardStyle(tokens: ThemeTokens): React.CSSProperties {
+  return {
+    background: tokens.surface,
+    border: `1px solid ${tokens.border}`,
+    borderRadius: 16,
+    padding: 20,
+  };
+}
 
-const EYEBROW: React.CSSProperties = {
-  margin: 0,
-  fontSize: 11,
-  fontWeight: 600,
-  textTransform: 'uppercase',
-  letterSpacing: '0.14em',
-  color: '#6E8A90',
-};
+function eyebrowStyle(tokens: ThemeTokens): React.CSSProperties {
+  return {
+    margin: 0,
+    fontSize: 11,
+    fontWeight: 600,
+    textTransform: 'uppercase',
+    letterSpacing: '0.14em',
+    color: tokens.textSubtle,
+  };
+}
 
 const MONO: React.CSSProperties = {
   fontFamily: "'Spline Sans Mono', monospace",
 };
 
 export function SwimWindowsCard({ windows, spot }: { windows: SwimWindow[]; spot: Spot }) {
+  const { theme } = useAppTheme();
+  const { tokens } = theme;
   return (
-    <section style={{ ...CARD, borderColor: 'rgba(143,193,181,0.4)' }}>
-      <p style={EYEBROW}>Fuinneoga snámha · Swim windows</p>
+    <section style={{ ...cardStyle(tokens), borderColor: 'rgba(143,193,181,0.4)' }}>
+      <p style={eyebrowStyle(tokens)}>Fuinneoga snámha · Swim windows</p>
       {windows.length === 0 ? (
-        <p style={{ margin: '10px 0 0', fontSize: 14, color: '#C6D2D2' }}>
+        <p style={{ margin: '10px 0 0', fontSize: 14, color: tokens.textMuted }}>
           No swimmable windows in the next few days — the sea needs to settle first.
         </p>
       ) : (
@@ -44,14 +52,14 @@ export function SwimWindowsCard({ windows, spot }: { windows: SwimWindow[]; spot
                     fontFamily: "'Clash Display', sans-serif",
                     fontWeight: 600,
                     fontSize: 18,
-                    color: window.nearHighTide ? '#8FC1B5' : '#E8ECEB',
+                    color: window.nearHighTide ? tokens.positive : tokens.text,
                     minWidth: 150,
                   }}
                 >
                   {formatDayName(window.start, spot.timezone)}{' '}
                   {formatHour(window.start, spot.timezone)}–{formatHour(window.end, spot.timezone)}
                 </span>
-                <span style={{ ...MONO, fontSize: 12, color: '#A9BDBF' }}>
+                <span style={{ ...MONO, fontSize: 12, color: tokens.textSoft }}>
                   {window.nearHighTide ? 'near high tide' : 'low-ish tide — long walk out'}
                   {first?.seaTempC !== undefined ? ` · ${first.seaTempC.toFixed(1)}°C` : ''}
                 </span>

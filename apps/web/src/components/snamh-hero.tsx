@@ -3,6 +3,7 @@
 import type { HourlyConditions, SwimVerdictResult, WaterQualityAlert } from '@tonnta/types';
 
 import { WIND_STATE_LABEL, compassPoint } from '@/lib/format';
+import { useAppTheme } from '@/themes/theme-context';
 
 import { SeaBands } from './sea-hero';
 
@@ -18,6 +19,12 @@ const SWIM_LABEL: Record<string, { english: string; irish: string }> = {
   no: { english: 'NOT TODAY', irish: 'Ná téigh' },
 };
 
+function resolveSwimSea(verdict: string): 'go' | 'maybe' | 'flat' | 'blown' {
+  if (verdict === 'great') return 'flat';
+  if (verdict === 'ok') return 'go';
+  return 'blown';
+}
+
 /** Swim verdict → SeaBands colour verdict: calm reads positive. */
 const SWIM_SEA_VERDICT: Record<string, string> = {
   great: 'flat',
@@ -32,6 +39,8 @@ interface SnamhHeroProps {
 }
 
 export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
+  const { theme } = useAppTheme();
+  const { tokens } = theme;
   const label = SWIM_LABEL[swim.verdict] ?? SWIM_LABEL.no;
   const isGreat = swim.verdict === 'great';
   const restricted = waterQuality?.restrictionInPlace === true;
@@ -40,7 +49,7 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
     <header
       style={{
         position: 'relative',
-        background: 'linear-gradient(180deg, #0C1B22 0%, #0E2129 60%, #16323B 100%)',
+        background: tokens.heroGradient,
         overflow: 'hidden',
         paddingBottom: 150,
       }}
@@ -63,7 +72,7 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '0.14em',
-              color: isGreat ? '#E8A33D' : '#A9BDBF',
+              color: isGreat ? tokens.accent : tokens.textSoft,
             }}
           >
             {label?.irish}
@@ -76,12 +85,20 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
               fontSize: 'clamp(48px, 12vw, 88px)',
               lineHeight: 0.98,
               letterSpacing: '-0.02em',
-              color: isGreat ? '#E8A33D' : '#E8ECEB',
+              color: isGreat ? tokens.accent : tokens.text,
             }}
           >
             {label?.english}
           </h1>
-          <p style={{ margin: 0, maxWidth: 440, fontSize: 16, lineHeight: 1.5, color: '#C6D2D2' }}>
+          <p
+            style={{
+              margin: 0,
+              maxWidth: 440,
+              fontSize: 16,
+              lineHeight: 1.5,
+              color: tokens.textMuted,
+            }}
+          >
             {swim.reason}
           </p>
 
@@ -101,11 +118,11 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
                   fontWeight: 600,
                   fontSize: 44,
                   letterSpacing: -1,
-                  color: '#E8ECEB',
+                  color: tokens.text,
                 }}
               >
                 {hour.seaTempC.toFixed(1)}
-                <span style={{ fontSize: 20, color: '#A9BDBF' }}>°C sea</span>
+                <span style={{ fontSize: 20, color: tokens.textSoft }}>°C sea</span>
               </span>
             ) : null}
             {hour !== undefined ? (
@@ -113,7 +130,7 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
                 style={{
                   fontFamily: "'Spline Sans Mono', monospace",
                   fontSize: 13,
-                  color: '#A9BDBF',
+                  color: tokens.textSoft,
                 }}
               >
                 {hour.waveHeightM.toFixed(1)}m sea · {WIND_STATE_LABEL[hour.windState]}{' '}
@@ -132,10 +149,10 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
                 maxWidth: 440,
                 borderRadius: 12,
                 border: '1px solid rgba(196,85,59,0.6)',
-                background: 'rgba(196,85,59,0.12)',
+                background: tokens.dangerBg,
                 fontSize: 13,
                 lineHeight: 1.5,
-                color: '#E8ECEB',
+                color: tokens.text,
               }}
             >
               Bathing restriction in place at {waterQuality?.beachName} — EPA notice
@@ -145,7 +162,11 @@ export function SnamhHero({ swim, hour, waterQuality }: SnamhHeroProps) {
         </div>
       </div>
 
-      <SeaBands hour={hour} verdict={SWIM_SEA_VERDICT[swim.verdict] ?? 'blown'} />
+      <SeaBands
+        hour={hour}
+        verdict={SWIM_SEA_VERDICT[swim.verdict] ?? 'blown'}
+        colour={tokens.sea[resolveSwimSea(swim.verdict)]}
+      />
     </header>
   );
 }

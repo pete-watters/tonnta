@@ -9,6 +9,7 @@ import {
   urlBase64ToUint8Array,
 } from '@/lib/alerts';
 import { ALERTS_URL, VAPID_PUBLIC_KEY } from '@/lib/site';
+import { useAppTheme } from '@/themes/theme-context';
 
 /**
  * Alert opt-in: one switch, no account. The push subscription endpoint is
@@ -19,19 +20,14 @@ import { ALERTS_URL, VAPID_PUBLIC_KEY } from '@/lib/site';
 type AlertState =
   'checking' | 'unsupported' | 'ios-install' | 'off' | 'working' | 'on' | 'denied' | 'error';
 
-const CARD: React.CSSProperties = {
-  background: '#122630',
-  border: '1px solid #22404C',
-  borderRadius: 16,
-  padding: 20,
-};
-
 async function readyServiceWorker(): Promise<ServiceWorkerRegistration> {
   await navigator.serviceWorker.register('/sw.js');
   return navigator.serviceWorker.ready;
 }
 
 export function AlertCard({ spotId }: { spotId: string }) {
+  const { theme } = useAppTheme();
+  const { tokens } = theme;
   const [state, setState] = useState<AlertState>('checking');
 
   useEffect(() => {
@@ -119,7 +115,15 @@ export function AlertCard({ spotId }: { spotId: string }) {
   };
 
   return (
-    <section style={{ ...CARD, borderColor: 'rgba(232,163,61,0.4)' }}>
+    <section
+      style={{
+        background: tokens.surface,
+        border: `1px solid ${tokens.border}`,
+        borderRadius: 16,
+        padding: 20,
+        borderColor: tokens.accentBorder,
+      }}
+    >
       <p
         style={{
           margin: 0,
@@ -127,12 +131,12 @@ export function AlertCard({ spotId }: { spotId: string }) {
           fontWeight: 600,
           textTransform: 'uppercase',
           letterSpacing: '0.14em',
-          color: '#6E8A90',
+          color: tokens.textSubtle,
         }}
       >
         Fógraí · Alerts
       </p>
-      <p style={{ margin: '10px 0 14px', fontSize: 14, lineHeight: 1.55, color: '#C6D2D2' }}>
+      <p style={{ margin: '10px 0 14px', fontSize: 14, lineHeight: 1.55, color: tokens.textMuted }}>
         {copy[state]}
       </p>
       {state === 'off' || state === 'error' ? (
@@ -145,8 +149,8 @@ export function AlertCard({ spotId }: { spotId: string }) {
             padding: '10px 20px',
             borderRadius: 999,
             border: 'none',
-            background: '#E8A33D',
-            color: '#0C1B22',
+            background: tokens.accent,
+            color: tokens.accentContrast,
             fontFamily: "'Clash Display', sans-serif",
             fontWeight: 600,
             fontSize: 15,
@@ -165,9 +169,9 @@ export function AlertCard({ spotId }: { spotId: string }) {
           style={{
             padding: '8px 16px',
             borderRadius: 999,
-            border: '1px solid #31525F',
+            border: `1px solid ${tokens.border}`,
             background: 'transparent',
-            color: '#A9BDBF',
+            color: tokens.textSoft,
             fontSize: 13,
             cursor: 'pointer',
           }}
