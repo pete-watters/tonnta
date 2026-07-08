@@ -13,6 +13,7 @@ import {
 import { SeaHero } from '@/components/sea-hero';
 import { SnamhHero } from '@/components/snamh-hero';
 import { SwimWindowsCard } from '@/components/snamh-sections';
+import { SpotSwitcher } from '@/components/spot-switcher';
 import { ThemePicker } from '@/components/theme-picker';
 import type { SpotConditions } from '@/lib/conditions';
 import { EiriHero } from '@/themes/eiri/eiri-hero';
@@ -153,6 +154,7 @@ export function HomeView({ conditions }: { conditions: SpotConditions }) {
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <SpotSwitcher activeSpotId={spot.id} />
             <ModeToggle mode={mode} onChange={setMode} />
             <ThemePicker />
           </div>
