@@ -18,6 +18,7 @@ import { ThemePicker } from '@/components/theme-picker';
 import type { SpotConditions } from '@/lib/conditions';
 import { CairtHero } from '@/themes/cairt/cairt-hero';
 import { EiriHero } from '@/themes/eiri/eiri-hero';
+import { PostaerHero } from '@/themes/postaer/postaer-hero';
 import { useAppTheme } from '@/themes/theme-context';
 
 /**
@@ -126,6 +127,9 @@ export function HomeView({ conditions }: { conditions: SpotConditions }) {
         spot={spot}
       />
     );
+  }
+  if (theme.hero === 'postaer') {
+    surfHero = <PostaerHero spot={spot} verdict={conditions.now} hour={conditions.currentHour} />;
   }
 
   return (
