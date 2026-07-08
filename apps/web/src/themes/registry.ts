@@ -9,9 +9,9 @@
  * token contract.
  */
 
-export type ThemeId = 'eiri' | 'dawn-v1';
+export type ThemeId = 'eiri' | 'cairt' | 'dawn-v1';
 
-export type HeroKind = 'eiri' | 'legacy';
+export type HeroKind = 'eiri' | 'cairt' | 'legacy';
 
 export interface SeaTokens {
   go: string;
@@ -98,6 +98,31 @@ const EIRI_TOKENS: ThemeTokens = {
   heroGradient: 'linear-gradient(180deg, #10142E 0%, #16323B 55%, #1D3D44 100%)',
 };
 
+/** An Cairt: Admiralty-chart instrument. Light chart paper, sounding ink,
+ *  hairline rules; notice magenta is spent only on GO and alerts. */
+const CAIRT_TOKENS: ThemeTokens = {
+  bg: '#EEF2EC',
+  nav: '#EEF2EC',
+  surface: 'rgba(255,255,255,0.72)',
+  border: '#B9C9C2',
+  accentBorder: '#B8266B',
+  text: '#12333E',
+  textMuted: '#2E5561',
+  textSoft: '#4D7280',
+  textSubtle: '#5F7E89',
+  accent: '#B8266B',
+  accentContrast: '#FFFFFF',
+  accentSoftBg: 'rgba(184,38,107,0.08)',
+  positive: '#2E7D6B',
+  danger: '#B3401F',
+  dangerBorder: 'rgba(179,64,31,0.5)',
+  dangerBg: 'rgba(179,64,31,0.07)',
+  toggleActiveBg: '#12333E',
+  toggleActiveText: '#EEF2EC',
+  sea: { go: '#4D7280', maybe: '#9DB8C2', flat: '#B4C6C1', blown: '#77898E' },
+  heroGradient: 'linear-gradient(180deg, #EEF2EC 0%, #E4EBE4 100%)',
+};
+
 export const THEMES: readonly AppTheme[] = [
   {
     id: 'eiri',
@@ -107,6 +132,15 @@ export const THEMES: readonly AppTheme[] = [
     swatch: ['#10142E', '#E8A33D', '#12333A'],
     hero: 'eiri',
     tokens: EIRI_TOKENS,
+  },
+  {
+    id: 'cairt',
+    name: 'An Cairt',
+    irishName: 'An Cairt',
+    description: "The harbourmaster's chart — soundings, contours and a stamped verdict.",
+    swatch: ['#EEF2EC', '#12333E', '#B8266B'],
+    hero: 'cairt',
+    tokens: CAIRT_TOKENS,
   },
   {
     id: 'dawn-v1',

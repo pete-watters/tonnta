@@ -16,6 +16,7 @@ import { SwimWindowsCard } from '@/components/snamh-sections';
 import { SpotSwitcher } from '@/components/spot-switcher';
 import { ThemePicker } from '@/components/theme-picker';
 import type { SpotConditions } from '@/lib/conditions';
+import { CairtHero } from '@/themes/cairt/cairt-hero';
 import { EiriHero } from '@/themes/eiri/eiri-hero';
 import { useAppTheme } from '@/themes/theme-context';
 
@@ -102,8 +103,9 @@ export function HomeView({ conditions }: { conditions: SpotConditions }) {
   const { theme } = useAppTheme();
   const { tokens } = theme;
   const { spot } = conditions;
-  const surfHero =
-    theme.hero === 'eiri' ? (
+  let surfHero = <SeaHero verdict={conditions.now} hour={conditions.currentHour} />;
+  if (theme.hero === 'eiri') {
+    surfHero = (
       <EiriHero
         verdict={conditions.now}
         hour={conditions.currentHour}
@@ -113,9 +115,18 @@ export function HomeView({ conditions }: { conditions: SpotConditions }) {
         longitude={spot.longitude}
         timezone={spot.timezone}
       />
-    ) : (
-      <SeaHero verdict={conditions.now} hour={conditions.currentHour} />
     );
+  }
+  if (theme.hero === 'cairt') {
+    surfHero = (
+      <CairtHero
+        verdict={conditions.now}
+        hour={conditions.currentHour}
+        buoy={conditions.buoy}
+        spot={spot}
+      />
+    );
+  }
 
   return (
     <>
