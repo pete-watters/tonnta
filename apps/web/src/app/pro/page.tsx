@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 
 import { ProClient } from './pro-client';
 
-export const runtime = 'edge';
-
 export const metadata: Metadata = {
   title: 'Tonnta Pro',
   description:
