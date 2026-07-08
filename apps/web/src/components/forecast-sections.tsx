@@ -18,8 +18,8 @@ import { useAppTheme } from '@/themes/theme-context';
 function cardStyle(tokens: ThemeTokens): React.CSSProperties {
   return {
     background: tokens.surface,
-    border: `1px solid ${tokens.border}`,
-    borderRadius: 16,
+    border: `${tokens.cardBorderPx ?? 1}px solid ${tokens.border}`,
+    borderRadius: tokens.cardRadiusPx ?? 16,
     padding: 20,
   };
 }

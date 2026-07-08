@@ -9,9 +9,9 @@
  * token contract.
  */
 
-export type ThemeId = 'eiri' | 'dawn-v1';
+export type ThemeId = 'eiri' | 'dawn-v1' | 'postaer';
 
-export type HeroKind = 'eiri' | 'legacy';
+export type HeroKind = 'eiri' | 'legacy' | 'postaer';
 
 export interface SeaTokens {
   go: string;
@@ -47,6 +47,9 @@ export interface ThemeTokens {
   sea: SeaTokens;
   /** Static hero wash used by legacy + Snámh heroes */
   heroGradient: string;
+  /** Card chrome overrides — poster themes print heavier borders. */
+  cardBorderPx?: number;
+  cardRadiusPx?: number;
 }
 
 export interface AppTheme {
@@ -98,6 +101,32 @@ const EIRI_TOKENS: ThemeTokens = {
   heroGradient: 'linear-gradient(180deg, #10142E 0%, #16323B 55%, #1D3D44 100%)',
 };
 
+/** Screen-print inks on poster stock — cards read as printed paper panels. */
+const POSTAER_TOKENS: ThemeTokens = {
+  bg: '#F4E9D3',
+  nav: '#F4E9D3',
+  surface: '#F9F1E1',
+  border: '#1E4D46',
+  accentBorder: '#E2593B',
+  text: '#1E4D46',
+  textMuted: '#2E5A52',
+  textSoft: '#4A7268',
+  textSubtle: '#6B8B80',
+  accent: '#E2593B',
+  accentContrast: '#F4E9D3',
+  accentSoftBg: 'rgba(226, 89, 59, 0.14)',
+  positive: '#3E8477',
+  danger: '#B3401F',
+  dangerBorder: 'rgba(179, 64, 31, 0.55)',
+  dangerBg: 'rgba(179, 64, 31, 0.1)',
+  toggleActiveBg: '#1E4D46',
+  toggleActiveText: '#F4E9D3',
+  sea: { go: '#3E8477', maybe: '#7FB5A4', flat: '#C7D6C4', blown: '#5B7268' },
+  heroGradient: 'linear-gradient(180deg, #F4E9D3 0%, #F4E9D3 55%, #7FB5A4 100%)',
+  cardBorderPx: 2,
+  cardRadiusPx: 10,
+};
+
 export const THEMES: readonly AppTheme[] = [
   {
     id: 'eiri',
@@ -116,6 +145,15 @@ export const THEMES: readonly AppTheme[] = [
     swatch: ['#0C1B22', '#8FC1B5', '#E8A33D'],
     hero: 'legacy',
     tokens: DAWN_V1_TOKENS,
+  },
+  {
+    id: 'postaer',
+    name: 'An Postaer',
+    irishName: 'An Postaer',
+    description: 'The seaside travel poster — four inks, one sun, today as a print.',
+    swatch: ['#F4E9D3', '#E2593B', '#1E4D46'],
+    hero: 'postaer',
+    tokens: POSTAER_TOKENS,
   },
 ];
 
