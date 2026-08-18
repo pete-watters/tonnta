@@ -4,8 +4,16 @@ Feature: Crawler-facing artefacts
     Given the production host tonnta.surf
     When I build the robots.txt body
     Then it carries the Content-Signal line allowing search and AI input but not training
+    And it reserves rights under Article 4 of the EU copyright directive
     And it allows crawling and points at the sitemap
-    And it keeps crawlers out of the machine-facing paths
+    And it keeps crawlers out of the API path but leaves the MCP endpoint open
+
+  Scenario: Training-only crawlers are blocked, citation crawlers are not
+    Given the production robots.txt body
+    When I read the per-crawler groups
+    Then every training-only crawler has its own Disallow group
+    And no citation or grounding crawler is blocked
+    And the wildcard group still allows the site
 
   Scenario: A preview deployment is closed to crawlers
     Given a Cloudflare Pages preview host

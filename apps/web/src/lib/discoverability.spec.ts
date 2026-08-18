@@ -8,6 +8,39 @@ import { PRODUCTION_ORIGIN, isProductionHost } from './site';
 
 const feature = await loadFeature('./discoverability.feature');
 
+const TRAINING_ONLY = [
+  'CCBot',
+  'Bytespider',
+  'Amazonbot',
+  'meta-externalagent',
+  'Applebot-Extended',
+];
+
+const CITATION_CRAWLERS = [
+  'ClaudeBot',
+  'Google-Extended',
+  'GPTBot',
+  'OAI-SearchBot',
+  'PerplexityBot',
+];
+
+/** Every user-agent whose group carries a blanket `Disallow: /`. */
+function blockedAgents(body: string): string[] {
+  const blocked: string[] = [];
+  let current: string | undefined;
+  for (const raw of body.split('\n')) {
+    const line = raw.trim();
+    if (line.startsWith('User-agent:')) {
+      current = line.slice('User-agent:'.length).trim();
+      continue;
+    }
+    if (line === 'Disallow: /' && current !== undefined) {
+      blocked.push(current);
+    }
+  }
+  return blocked;
+}
+
 describeFeature(feature, ({ Scenario }) => {
   Scenario(
     'The live site publishes content signals and a sitemap',
@@ -25,18 +58,61 @@ describeFeature(feature, ({ Scenario }) => {
       Then(
         'it carries the Content-Signal line allowing search and AI input but not training',
         () => {
-          expect(body).toContain('Content-Signal: search=yes, ai-input=yes, ai-train=no');
+          const signal = body
+            .split('\n')
+            .find((line) => line.startsWith('Content-Signal:'))
+            ?.slice('Content-Signal:'.length)
+            .split(',')
+            .map((part) => part.trim());
+          expect(signal).toEqual(['search=yes', 'ai-input=yes', 'ai-train=no']);
         }
       );
+      And('it reserves rights under Article 4 of the EU copyright directive', () => {
+        expect(body).toContain(
+          '# ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF\n' +
+            '# RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT\n' +
+            '# AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.'
+        );
+      });
       And('it allows crawling and points at the sitemap', () => {
         expect(body).toContain('User-agent: *');
         expect(body).toContain('Allow: /');
-        expect(body).toContain(`Sitemap: ${PRODUCTION_ORIGIN}/sitemap.xml`);
+        expect(body.trimEnd().endsWith(`Sitemap: ${PRODUCTION_ORIGIN}/sitemap.xml`)).toBe(true);
       });
-      And('it keeps crawlers out of the machine-facing paths', () => {
-        expect(body).toContain('Disallow: /mcp');
+      And('it keeps crawlers out of the API path but leaves the MCP endpoint open', () => {
         expect(body).toContain('Disallow: /api/');
-        expect(body).not.toContain('\nDisallow: /\n');
+        expect(body).not.toContain('Disallow: /mcp');
+      });
+    }
+  );
+
+  Scenario(
+    'Training-only crawlers are blocked, citation crawlers are not',
+    ({ Given, When, Then, And }) => {
+      let body = '';
+      let blocked: string[] = [];
+
+      Given('the production robots.txt body', () => {
+        body = buildRobotsTxt({ siteUrl: PRODUCTION_ORIGIN, indexable: true });
+      });
+      When('I read the per-crawler groups', () => {
+        blocked = blockedAgents(body);
+      });
+      Then('every training-only crawler has its own Disallow group', () => {
+        expect(blocked).toEqual(TRAINING_ONLY);
+        for (const crawler of TRAINING_ONLY) {
+          expect(body).toContain(`User-agent: ${crawler}`);
+        }
+      });
+      And('no citation or grounding crawler is blocked', () => {
+        for (const crawler of CITATION_CRAWLERS) {
+          expect(blocked).not.toContain(crawler);
+          expect(body).not.toContain(`User-agent: ${crawler}`);
+        }
+        expect(body).toContain('allowed ON PURPOSE');
+      });
+      And('the wildcard group still allows the site', () => {
+        expect(blocked).not.toContain('*');
       });
     }
   );
